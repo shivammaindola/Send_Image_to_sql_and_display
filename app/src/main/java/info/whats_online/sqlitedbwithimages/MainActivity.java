@@ -8,8 +8,9 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -32,6 +33,11 @@ public class MainActivity extends Activity {
     private Contact dataModel;
     private Bitmap bp;
     private byte[] photo;
+    private boolean zoomOut =  false;
+
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
 
 
 
@@ -43,7 +49,7 @@ public class MainActivity extends Activity {
         //Instantiate database handler
         db=new DatabaseHandler(this);
 
-        lv = (ListView) findViewById(R.id.list1);
+       // lv = (ListView) findViewById(R.id.list1);
         pic= (ImageView) findViewById(R.id.pic);
         fname=(EditText) findViewById(R.id.txt1);
 
@@ -161,21 +167,16 @@ public class MainActivity extends Activity {
 
      //Retrieve data from the database and set to the list view
     private void ShowRecords(){
+        //add items in recyclerview
         final ArrayList<Contact> contacts = new ArrayList<>(db.getAllContacts());
-        data=new dataAdapter(this, contacts);
 
-        lv.setAdapter(data);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
 
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        adapter = new RecyclerAdapter(this, contacts);
+        recyclerView.setAdapter(adapter);
 
-                dataModel = contacts.get(position);
-                
-                //koi to chut dilado
-                //insert code to open in full view. Itna to karnaich padega
-               Toast.makeText(getApplicationContext(),String.valueOf(dataModel.getID()), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }

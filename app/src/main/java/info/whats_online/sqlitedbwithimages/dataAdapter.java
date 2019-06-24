@@ -58,9 +58,10 @@ public class dataAdapter extends ArrayAdapter<Contact>{
             viewHolder = (Holder) convertView.getTag();
         }
 
-
         viewHolder.nameFV.setText("First Name: "+data.getFName());
         viewHolder.pic.setImageBitmap(convertToBitmap(data.getImage()));
+
+
 
 
         // Return the completed view to render on screen
